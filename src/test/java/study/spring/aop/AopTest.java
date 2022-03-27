@@ -11,6 +11,8 @@ import study.spring.aop.order.OrderRepository;
 import study.spring.aop.order.OrderService;
 import study.spring.aop.order.aop.*;
 
+import static org.assertj.core.api.Assertions.*;
+
 @Slf4j
 @SpringBootTest
 //@Import(AspectV1.class)
@@ -40,7 +42,7 @@ public class AopTest {
 
     @Test
     void exception() {
-        Assertions.assertThatThrownBy(() -> orderService.orderItem("ex"))
+        assertThatThrownBy(() -> orderService.orderItem("ex"))
                 .isInstanceOf(IllegalStateException.class);
     }
 }
