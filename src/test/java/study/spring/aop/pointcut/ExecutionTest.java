@@ -1,12 +1,15 @@
 package study.spring.aop.pointcut;
 
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import study.spring.aop.member.MemberServiceImpl;
 
 import java.lang.reflect.Method;
+
+import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
 public class ExecutionTest {
@@ -23,6 +26,73 @@ public class ExecutionTest {
     void printMethod() {
         //public java.lang.String study.spring.aop.member.MemberServiceImpl.hello(java.lang.String)
         log.info("helloMethod={}", helloMethod);
+    }
+
+    @Test
+    void exactMatch() {
+        //public java.lang.String study.spring.aop.member.MemberServiceImpl.hello(java.lang.String)
+        pointcut.setExpression("execution(public String study.spring.aop.member.MemberServiceImpl.hello(String))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    @Test
+    void allMatch() {
+        pointcut.setExpression("execution(* *(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    @Test
+    void nameMatch() {
+        pointcut.setExpression("execution(* hello(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    @Test
+    void nameMatchStar1() {
+        pointcut.setExpression("execution(* hel*(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    @Test
+    void nameMatchStar2() {
+        pointcut.setExpression("execution(* *el*(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    @Test
+    void nameMatchFalse() {
+        pointcut.setExpression("execution(* nono(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isFalse();
+    }
+
+    @Test
+    void packageExactMatch1() {
+        pointcut.setExpression("execution(* study.spring.aop.member.MemberServiceImpl.hello(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    @Test
+    void packageExactMatch2() {
+        pointcut.setExpression("execution(* study.spring.aop.member.*.*(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    @Test
+    void packageExactFalse() {
+        pointcut.setExpression("execution(* study.spring.aop.*.*(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isFalse();
+    }
+
+    @Test
+    void packageMatchSubPackage1() {
+        pointcut.setExpression("execution(* study.spring.aop.member..*.*(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    @Test
+    void packageMatchSubPackage2() {
+        pointcut.setExpression("execution(* study.spring.aop..*.*(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
     }
 
 }
