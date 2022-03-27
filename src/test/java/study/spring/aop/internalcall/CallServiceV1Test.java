@@ -7,24 +7,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import study.spring.aop.internalcall.aop.CallLogAspect;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @Slf4j
 @Import(CallLogAspect.class)
 @SpringBootTest
-class CallServiceVOTest {
+class CallServiceV1Test {
 
     @Autowired
-    CallServiceVO callServiceVO;
+    CallServiceV1 callServiceV1;
 
     @Test
     void external() {
-        //log.info("target={}", callServiceVO.getClass());
-        callServiceVO.external();
+        callServiceV1.external();
     }
 
-    @Test
-    void internal() {
-        callServiceVO.internal();
-    }
 }
