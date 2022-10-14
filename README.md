@@ -10,6 +10,16 @@
     - AOP 용어 정리
 10. 스프링 AOP 구현
     - 프로젝트 생성
+        - 프로젝트 선택
+            - Project : Gradle Project
+            - Language : Java
+            - Spring Boot : 2.6.x
+        - Project Metadata
+            - Group : study.spring
+            - Artifact : aop
+            - Package name : study.spring.aop
+            - Packaging : Jar
+            - Java : 11
     - 예제 프로젝트 만들기
     - 스프링 AOP 구현1 - 시작
     - 스프링 AOP 구현2 - 포인트컷 분리
